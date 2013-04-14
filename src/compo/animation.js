@@ -84,6 +84,4 @@
 		animation.start(callback, element);
 	};
 
-
-	window.AModel = Model;
 }());
