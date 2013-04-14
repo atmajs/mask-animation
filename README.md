@@ -1,5 +1,5 @@
 Mask Animation Handler
-----
+-----
 
 
 ````css
@@ -18,12 +18,12 @@ div {
 }
 ````
 #### Animation Property Declaration
-Is a TextNode with a structure
+is a TextNode with a structure:
 ````javascript
 'propertyName | from > to | time timing delay'
 ````
 
-Defaults
+Defaults:
 * timing = linear
 * delay = 0
 * from = current value
@@ -81,13 +81,19 @@ As Mask supports signal/slots and pipes technics, so slots and piped-slots can b
 the animation will be started
 
 ##### Slots
-````css :animation #aniID x-slots='slotName; anyOtherName' { // model ````
+````css 
+:animation #aniID x-slots='slotName; anyOtherName' { // model 
+````
 
 So now if some controller emits a signal downwards, and the signal reaches the animation handler, then element will be animated
-````javascript this.emitIn('slotName'); ````
+````javascript 
+this.emitIn('slotName'); 
+````
 
 Controller can start animation also manually with, and if needed - override animate element.
-````javascript this.animation('aniID').start(?onAnimationEnd, ?element); ````
+````javascript 
+this.animation('aniID').start(?onAnimationEnd, ?element); 
+````
 
 ##### Pipes
 ```` :animation #aniID x-pipes='pipeName.slotName; otherPipe.otherSlot' { // model ````
@@ -95,7 +101,9 @@ Controller can start animation also manually with, and if needed - override anim
 Animation Handler will be binded to a specified pipes, and if there a signal is emitted, then it will start the animation.
 
 You emit a signal in a pipe with:
-````javascript Compo.pipe('pipeName').emit('signalName', ?argsArray); ````
+````javascript 
+Compo.pipe('pipeName').emit('signalName', ?argsArray); 
+````
 
 
 
