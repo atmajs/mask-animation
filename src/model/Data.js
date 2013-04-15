@@ -108,20 +108,20 @@ var ModelData = (function() {
 				return this;
 			}
 
-			if (this.state == 1 && this.modelCount > 0) {
+			if (this.state === 1 && this.modelCount > 0) {
 				--this.modelCount;
 			}
-			if (this.state == 1 && this.modelCount === 0) {
+			if (this.state === 1 && this.modelCount === 0) {
 				this.state = 2;
 				if (this.next) {
 					return this.next;
 				}
 			}
-			if (this.state == 2 && this.nextCount > 0) {
+			if (this.state === 2 && this.nextCount > 0) {
 				--this.nextCount;
 			}
 
-			if (this.state == 2 && this.nextCount === 0 && this.parent) {
+			if (this.state === 2 && this.nextCount === 0 && this.parent) {
 				return this.parent.getNext && this.parent.getNext();
 			}
 			return null;

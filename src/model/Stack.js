@@ -23,10 +23,10 @@ var Stack = (function() {
 			if (next instanceof Array) {
 				for (i = 0, length = next.length; i < length; i++) {
 					if (this.put(next[i]) === true) {
-						r = true;
+						result = true;
 					}
 				}
-				return r;
+				return result;
 			}
 
 			if (next.state === 0) {
@@ -34,13 +34,13 @@ var Stack = (function() {
 			}
 
 			if (next.model instanceof Array) {
-				r = false;
+				result = false;
 				for (i = 0, length = next.model.length; i < length; i++) {
 					if (this.put(next.model[i]) === true) {
-						r = true;
+						result = true;
 					}
 				}
-				return r;
+				return result;
 			}
 
 
@@ -54,8 +54,7 @@ var Stack = (function() {
 		resolve: function(prop) {
 			for (var i = 0, x, length = this.arr.length; i < length; i++) {
 				x = this.arr[i];
-				if (x.model.prop == prop) {
-					//-console.log('resolve',prop, x);
+				if (x.model.prop === prop) { // XX strict compare
 					this.arr.splice(i, 1);
 					return this.put(x);
 				}

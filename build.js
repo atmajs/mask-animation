@@ -47,6 +47,7 @@ function JSHint() {
 
 	return {
 		options: {
+			expr: true,
 			curly: true,
 			eqeqeq: true,
 			forin: false,

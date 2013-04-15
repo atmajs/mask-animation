@@ -1,8 +1,3 @@
-function mask_getAnimationModel(animation) {
-	return mask_toJSON(animation.nodes);
-}
-
-window.maskToJson = mask_toJSON;
 
 function mask_toJSON(node) {
 

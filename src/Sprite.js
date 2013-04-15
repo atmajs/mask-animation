@@ -45,7 +45,7 @@ var Sprite = (function() {
 				setTimeout(function() {
 					var keyframe = keyframes[animationId];
 
-					if (style[vendor.AnimationFillMode] == 'forwards') {
+					if (style[vendor.AnimationFillMode] === 'forwards') {
 						Sprite.stop($element);
 						return;
 					}
