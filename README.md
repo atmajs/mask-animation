@@ -1,4 +1,4 @@
-Mask Animation Handler
+Mask CSS3 Animation Handler
 -----
 
 
@@ -8,7 +8,7 @@ div {
         @model {
     		// property declaration
         	'propertyName | from > to | time timing delay'
-        	'otherProperty ...'  
+        	'otherProperty ...'
         }
         @next {
             // when upper model is ready
@@ -17,6 +17,9 @@ div {
     }
 }
 ````
+
+<a href='http://libjs.it/mask-try/#preset::animation'> Simple Deom </a>
+
 #### Animation Property Declaration
 is a TextNode with a structure:
 ````javascript
@@ -55,14 +58,14 @@ Sample
 		'transform | > rotate(45deg) | 1s linear' // rotate to 45 degrees from initial state
 	}
 	@next {
-		'transform | scale(0) > scale(2) | 500ms' // scale from 0 to 2, rotation will be kept 
+		'transform | scale(0) > scale(2) | 500ms' // scale from 0 to 2, rotation will be kept
 	}
 }
 @next {
 	@model {
 		@model {
 			// animate background-color for 3 seconds after upper model is ready, that means, after scale animation end.
-			'background-color | white > red | 3s ease-out' 
+			'background-color | white > red | 3s ease-out'
 		}
 		@next {
 			// dissolve the element
@@ -81,18 +84,18 @@ As Mask supports signal/slots and pipes technics, so slots and piped-slots can b
 the animation will be started
 
 ##### Slots
-````css 
-:animation #aniID x-slots='slotName; anyOtherName' { // model 
+````css
+:animation #aniID x-slots='slotName; anyOtherName' { // model
 ````
 
 So now if some controller emits a signal downwards, and the signal reaches the animation handler, then element will be animated
-````javascript 
-this.emitIn('slotName'); 
+````javascript
+this.emitIn('slotName');
 ````
 
 Controller can start animation also manually with, and if needed - override animate element.
-````javascript 
-this.animation('aniID').start(?onAnimationEnd, ?element); 
+````javascript
+this.animation('aniID').start(?onAnimationEnd, ?element);
 ````
 
 ##### Pipes
@@ -101,9 +104,6 @@ this.animation('aniID').start(?onAnimationEnd, ?element);
 Animation Handler will be binded to a specified pipes, and if there a signal is emitted, then it will start the animation.
 
 You emit a signal in a pipe with:
-````javascript 
-Compo.pipe('pipeName').emit('signalName', ?argsArray); 
+````javascript
+Compo.pipe('pipeName').emit('signalName', ?argsArray);
 ````
-
-
-

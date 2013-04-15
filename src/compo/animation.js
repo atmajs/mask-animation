@@ -68,7 +68,7 @@
 		start: function(callback, element){
 			this.model.start(element || this.container, callback);
 		}
-	}
+	};
 
 	mask.registerHandler(':animation', AnimationCompo);
 
