@@ -18,7 +18,7 @@ div {
 }
 ````
 
-<a href='http://libjs.it/mask-try/#preset::animation'> Simple Deom </a>
+<a href='http://libjs.it/mask-try/#preset::animation'> Simple Demo </a>
 
 #### Animation Property Declaration
 is a TextNode with a structure:
