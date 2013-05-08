@@ -2,13 +2,14 @@ var Sprite = (function() {
 	var keyframes = {},
 		vendor = null,
 		initVendorStrings = function() {
+			
 			vendor = {
 				keyframes: "@" + vendorPrfx + "keyframes",
-				AnimationIterationCount: vendorPrfx + 'AnimationIterationCount',
-				AnimationDuration: vendorPrfx + 'AnimationDuration',
-				AnimationTimingFunction: vendorPrfx + 'AnimationTimingFunction',
-				AnimationFillMode: vendorPrfx + 'AnimationFillMode',
-				AnimationName: vendorPrfx + 'AnimationName'
+				AnimationIterationCount: prfx + 'AnimationIterationCount',
+				AnimationDuration: prfx + 'AnimationDuration',
+				AnimationTimingFunction: prfx + 'AnimationTimingFunction',
+				AnimationFillMode: prfx + 'AnimationFillMode',
+				AnimationName: prfx + 'AnimationName'
 			};
 		};
 
@@ -38,18 +39,18 @@ var Sprite = (function() {
 					keyframes[data.id] = keyFrameAnimation;
 				}
 			},
-			start: function($element, animationId, msperframe) {
-				var style = $element.get(0).style;
+			start: function(element, animationId, msperframe) {
+				var style = element.style;
 
 				style[vendor.AnimationName] = 'none';
 				setTimeout(function() {
 					var keyframe = keyframes[animationId];
 
 					if (style[vendor.AnimationFillMode] === 'forwards') {
-						Sprite.stop($element);
+						Sprite.stop(element);
 						return;
 					}
-					$element.on(vendor + 'AnimationEnd', function() {
+					element.addEventListener(vendor + 'AnimationEnd', function() {
 						var css;
 						if (keyframe.frameToStop) {
 							//TODO: now only last cssRule is taken
@@ -59,8 +60,8 @@ var Sprite = (function() {
 								css[styles[i]] = styles[styles[i]];
 							}
 						}
-						Sprite.stop($element, css);
-					});
+						Sprite.stop(element, css);
+					}, false);
 
 					style[vendor.AnimationIterationCount] = keyframe.iterationCount || 1;
 					style[vendor.AnimationDuration] = (keyframe.cssRules.length * msperframe) + 'ms';
@@ -70,12 +71,12 @@ var Sprite = (function() {
 
 				}, 0);
 			},
-			stop: function($element, css) {
-				var style = $element.get(0).style;
+			stop: function(element, css) {
+				var style = element.style;
 				style[vendor.AnimationFillMode] = 'none';
 				style[vendor.AnimationName] = '';
 				if (css != null) {
-					$element.css(css);
+					$(element).css(css);
 				}
 			}
 		};

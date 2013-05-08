@@ -8,6 +8,7 @@
 	// import ../src/Sprite.js
 
 	// import ../src/compo/animation.js
+	// import ../src/compo/sprite.js
 	// import ../src/export.js
 
 
