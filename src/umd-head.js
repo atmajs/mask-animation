@@ -6,7 +6,7 @@
     }
 
 	var construct = function(){
-            return factory(root, mask);
+            return factory(root, root.mask);
         };
 
     if (typeof exports === 'object') {

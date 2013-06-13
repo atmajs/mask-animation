@@ -26,7 +26,7 @@ var Sprite = (function() {
 					var pos = document.styleSheets[0].insertRule(vendor.keyframes + " " + data.id + " {}", 0),
 						keyFrameAnimation = document.styleSheets[0].cssRules[pos],
 						frames = data.frames - (data.frameStart || 0),
-						step = 100 / frames | 0,
+						step = 100 / frames,
 						property = data.property || 'background-position-x';
 
 					for (var i = 0; i < frames; i++) {
