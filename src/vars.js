@@ -19,6 +19,24 @@ var el = document.createElement('div'),
 		return '';
 
 	}()),
+	supportTransitions = (function(){
+		var array = [
+			'transition' ,
+			'webkitTransition',
+			'MozTransition',
+			'OTransition',
+			'msTransition'
+		];
+		
+		for (var i = 0, x, imax = array.length; i < imax; i++){
+			if (array[i] in el.style) {
+				return true;
+			}
+		}
+		
+		return false;
+	
+	}()),
 	vendorPrfx = prfx ? '-' + prfx.toLowerCase() + '-' : '',
 	getTransitionEndEvent = function() {
 		var el = document.createElement('div'),
@@ -52,3 +70,5 @@ var el = document.createElement('div'),
 		timing: vendorPrfx + 'transition-timing-function',
 		delay: vendorPrfx + 'transition-delay'
 	};
+
+	console.warn('Support' + supportTransitions);

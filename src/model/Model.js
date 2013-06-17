@@ -46,20 +46,27 @@ var Model = (function() {
 			element.addEventListener(getTransitionEndEvent(), this.transitionEnd, false);
 			this.element = element;
 			this.apply(startCss, css);
+			
+			if (onComplete && supportTransitions === false) {
+				onComplete();
+			}
 		},
 		transitionEnd: function(event) {
 			if (this.stack.resolve(event.propertyName) === true) {
 				var startCss = {},
 					css = {};
+					
 				this.stack.getCss(startCss, css);
 				this.apply(startCss, css);
-			} else {
-				if (this.stack.arr.length < 1) {
-
-					this.element.removeEventListener(getTransitionEndEvent(), this.transitionEnd, false);
-					this.onComplete && this.onComplete();
-				}
+				return;
 			}
+			
+			if (this.stack.arr.length < 1) {
+
+				this.element.removeEventListener(getTransitionEndEvent(), this.transitionEnd, false);
+				this.onComplete && this.onComplete();
+			}
+		
 
 		},
 
