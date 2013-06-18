@@ -70,5 +70,3 @@ var el = document.createElement('div'),
 		timing: vendorPrfx + 'transition-timing-function',
 		delay: vendorPrfx + 'transition-delay'
 	};
-
-	console.warn('Support' + supportTransitions);

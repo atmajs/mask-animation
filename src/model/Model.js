@@ -13,14 +13,24 @@ var Model = (function() {
 		};
 		
 	if (typeof TransitionEvent === 'object') {
-		// old webkits
-		TransitionEvent = function(eventName, data){
-			var event = document.createEvent('WebKitTransitionEvent');
-		
-			event.initWebKitTransitionEvent('webkitTransitionEnd', true, true, data.propertyName, 0);
-			return event;
-		};
-		
+		try {
+			new TransitionEvent('webkitTransitionEnd', {
+				propertyName: 'opacity',
+				bubbles: true,
+				cancelable: true
+			});
+		} catch(e) {
+			// old webkits
+			TransitionEvent = function(eventName, data){
+				var event = document.createEvent('WebKitTransitionEvent');
+				
+				
+			
+				event.initWebKitTransitionEvent('webkitTransitionEnd', true, true, data.propertyName, 0);
+				return event;
+			};
+				
+		}
 	}
 
 	function Model(models) {
