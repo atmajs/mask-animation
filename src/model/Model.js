@@ -14,6 +14,7 @@ var Model = (function() {
 		
 	if (typeof TransitionEvent === 'object') {
 		try {
+			// ios6 TransitionEvent is also callable, so do not shim
 			new TransitionEvent('webkitTransitionEnd', {
 				propertyName: 'opacity',
 				bubbles: true,
@@ -62,6 +63,12 @@ var Model = (function() {
 			}
 		},
 		transitionEnd: function(event) {
+			
+			// some other css3 transition could be in nested elements
+			if (event.target !== event.currentTarget) {
+				return;
+			}
+			
 			if (this.stack.resolve(event.propertyName) === true) {
 				var startCss = {},
 					css = {};
