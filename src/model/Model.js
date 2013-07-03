@@ -100,6 +100,13 @@ var Model = (function() {
 				}
 			}
 
+			
+			
+			if (env_isMoz === true) {
+				//setTimout(.., 0) doesnt solve layout racing in Moz
+				getComputedStyle(element).width
+			}
+			
 			setTimeout(function() {
 				var fire;
 				for (var key in css) {

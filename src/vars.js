@@ -1,19 +1,19 @@
-var el = document.createElement('div'),
+var style = document.createElement('div').style,
 	prfx = (function() {
 
-		if ('transform' in el.style) {
+		if ('transform' in style) {
 			return '';
 		}
-		if ('webkitTransform' in el.style) {
+		if ('webkitTransform' in style) {
 			return 'webkit';
 		}
-		if ('MozTransform' in el.style) {
+		if ('MozTransform' in style) {
 			return 'Moz';
 		}
-		if ('OTransform' in el.style) {
+		if ('OTransform' in style) {
 			return 'O';
 		}
-		if ('msTransform' in el.style) {
+		if ('msTransform' in style) {
 			return 'ms';
 		}
 		return '';
@@ -29,7 +29,7 @@ var el = document.createElement('div'),
 		];
 		
 		for (var i = 0, x, imax = array.length; i < imax; i++){
-			if (array[i] in el.style) {
+			if (array[i] in style) {
 				return true;
 			}
 		}
@@ -50,7 +50,7 @@ var el = document.createElement('div'),
 			event = null;
 
 		for (var t in transitions) {
-			if (el.style[t] !== undefined) {
+			if (style[t] !== undefined) {
 				event = transitions[t];
 				break;
 			}
@@ -70,3 +70,5 @@ var el = document.createElement('div'),
 		timing: vendorPrfx + 'transition-timing-function',
 		delay: vendorPrfx + 'transition-delay'
 	};
+	
+var env_isMoz = 'MozTransition' in style;
