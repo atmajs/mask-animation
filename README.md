@@ -107,3 +107,8 @@ You emit a signal in a pipe with:
 ````javascript
 Compo.pipe('pipeName').emit('signalName', ?argsArray);
 ````
+
+
+
+----
+Atma.js Project
