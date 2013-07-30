@@ -1,4 +1,4 @@
-Mask CSS3 Animation Handler
+CSS3 and Sprite Animations
 -----
 
 
