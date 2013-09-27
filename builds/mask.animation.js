@@ -4,6 +4,10 @@
 // import ../src/umd-head.js
 
 	// import ../src/vars.js
+    
+    // import ../src/utils/arr.js
+    // import ../src/utils/fn.js
+    
 	// import ../src/model/Model.js
 	// import ../src/Sprite.js
 

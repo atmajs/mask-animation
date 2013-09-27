@@ -47,7 +47,7 @@ var ModelData = (function() {
 
 
 
-		if (model instanceof Array) {
+		if (arr_isArray(model)) {
 			this.model = [];
 			for (var i = 0, length = model.length; i < length; i++) {
 				this.model.push(new ModelData(model[i], this));
@@ -74,16 +74,21 @@ var ModelData = (function() {
 		}
 
 		this.state = 0;
-		this.modelCount = this.model instanceof Array ? this.model.length : 1;
 		this.nextCount = 0;
+		this.modelCount = arr_isArray(this.model)
+			? this.model.length
+			: 1;
+		
 
 		if (this.next != null) {
-			this.nextCount = this.next instanceof Array ? this.next.length : 1;
+			this.nextCount = arr_isArray(this.next)
+				? this.next.length
+				: 1;
 		}
 	}
 
 	function model_resetMany(model) {
-		var isarray = model instanceof Array,
+		var isarray = arr_isArray(model),
 			length = isarray ? model.length : 1,
 			x = null,
 			i = 0;
@@ -92,16 +97,51 @@ var ModelData = (function() {
 			x.reset && x.reset();
 		}
 	}
+	
+	function model_getDuration(model) {
+	
+		var isarray = arr_isArray(model),
+			length = isarray ? model.length : 1,
+			x = null,
+			i = 0,
+			max = 0;
+		for (; isarray ? i < length : i < 1; i++) {
+			x = isarray ? model[i] : model;
+			
+			
+			var ms;
+			
+			if (fn_isFunction(x.getDuration)) {
+				ms = x.getDuration();
+			}
+			else if (model.duration.indexOf('ms') !== -1) {
+				ms = parseInt(model.duration);
+			}
+			else if (model.duration.indexOf('s') !== -1) {
+				ms = parseInt(model.duration) * 1000;
+			}
+			
+			if (ms > max) 
+				max = ms;
+		}
+		
+		return max;
+	}
 
 	ModelData.prototype = {
 		constructor: ModelData,
 		reset: function() {
 			this.state = 0;
-			this.modelCount = this.model instanceof Array ? this.model.length : 1;
 			this.nextCount = 0;
+			this.modelCount = arr_isArray(this.model)
+				? this.model.length
+				: 1;
+			
 
 			if (this.next != null) {
-				this.nextCount = this.next instanceof Array ? this.next.length : 1;
+				this.nextCount = arr_isArray(this.next)
+					? this.next.length
+					: 1;
 			}
 
 			this.model && model_resetMany(this.model);
@@ -131,6 +171,17 @@ var ModelData = (function() {
 				return this.parent.getNext && this.parent.getNext();
 			}
 			return null;
+		},
+		getDuration: function(){
+			var ms = 0;
+			
+			if (this.model)
+				ms += model_getDuration(this.model);
+			
+			if (this.next)
+				ms += model_getDuration(this.next);
+			
+			return ms;
 		}
 	};
 

@@ -59,7 +59,18 @@ var Model = (function() {
 	function Model(models) {
 		this.stack = new Stack();
 		this.model = new ModelData(models);
-		this.transitionEnd = this.transitionEnd.bind(this);
+		
+		/**
+		 * @Workaround - calculate duration in javascript, not to relay on transitionend event,
+		 * as it could be not fired on some situations, like setting display:none to the parent.
+		 *
+		 * Should we wait till there were some more transition events, like transitioninterrupt.
+		 */
+		this.duration = this.model.getDuration();
+		
+		this.transitionEnd = fn_proxy(this, this.transitionEnd);
+		this.finish = fn_proxy(this, this.finish);
+		this.finishTimeout = null;
 	}
 
 	Model.prototype = {
@@ -82,7 +93,16 @@ var Model = (function() {
 			
 			if (onComplete && supportTransitions === false) {
 				onComplete();
+				return;
 			}
+			
+			this.finishTimeout = setTimeout(this.finish, this.duration);
+		},
+		finish: function(){
+			this.element.removeEventListener(getTransitionEndEvent(), this.transitionEnd, false);
+			
+			if (fn_isFunction(this.onComplete))
+				this.onComplete();
 		},
 		transitionEnd: function(event) {
 			
@@ -100,11 +120,11 @@ var Model = (function() {
 				return;
 			}
 			
-			if (this.stack.arr.length < 1) {
-
-				this.element.removeEventListener(getTransitionEndEvent(), this.transitionEnd, false);
-				this.onComplete && this.onComplete();
-			}
+			//////if (this.stack.arr.length < 1) {
+			//////
+			//////	this.element.removeEventListener(getTransitionEndEvent(), this.transitionEnd, false);
+			//////	this.onComplete && this.onComplete();
+			//////}
 		
 
 		},

@@ -20,7 +20,7 @@ var Stack = (function() {
 			}
 
 
-			if (next instanceof Array) {
+			if (arr_isArray(next)) {
 				for (i = 0, length = next.length; i < length; i++) {
 					if (this.put(next[i]) === true) {
 						result = true;
@@ -80,7 +80,7 @@ var Stack = (function() {
 			}
 		},
 		clear: function() {
-			this.arr = [];
+			this.arr.length = 0;
 		}
 	};
 
