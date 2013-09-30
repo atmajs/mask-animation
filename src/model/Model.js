@@ -144,8 +144,8 @@ var Model = (function() {
 
 			
 			
-			if (env_isMoz === true) {
-				//setTimout(.., 0) doesnt solve layout racing in Moz
+			if (env_isMoz || env_isMs) {
+				//setTimout(.., 0) doesnt solve layout racing in Moz and Ms
 				getComputedStyle(element).width
 			}
 			

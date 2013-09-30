@@ -43,7 +43,7 @@ var style = document.createElement('div').style,
 			transitions = {
 				'transition': 'transitionend',
 				'OTransition': 'oTransitionEnd',
-				'MSTransition': 'msTransitionEnd',
+				'msTransition': 'msTransitionEnd',
 				'MozTransition': 'transitionend',
 				'WebkitTransition': 'webkitTransitionEnd'
 			},
@@ -60,8 +60,6 @@ var style = document.createElement('div').style,
 			return event;
 		};
 
-		el = null;
-		transitions = null;
 		return getTransitionEndEvent();
 	},
 	I = {
@@ -71,4 +69,5 @@ var style = document.createElement('div').style,
 		delay: vendorPrfx + 'transition-delay'
 	};
 	
-var env_isMoz = 'MozTransition' in style;
+var env_isMoz = 'MozTransition' in style,
+	env_isMs = 'msTransition' in style;
