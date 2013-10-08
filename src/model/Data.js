@@ -127,6 +127,28 @@ var ModelData = (function() {
 		
 		return max;
 	}
+	
+	function model_getFinalCss(model, css){
+		if (model == null) 
+			return;
+		
+		var isarray = arr_isArray(model),
+			length = isarray ? model.length : 1,
+			x = null,
+			i = 0;
+		for (; isarray ? i < length : i < 1; i++) {
+			x = isarray ? model[i] : model;
+			
+			
+			if (fn_isFunction(x.getFinalCss)) {
+				x.getFinalCss(css);
+				continue;
+			}
+			
+			css[x.prop] = x.to;
+		}
+		
+	}
 
 	ModelData.prototype = {
 		constructor: ModelData,
@@ -182,6 +204,16 @@ var ModelData = (function() {
 				ms += model_getDuration(this.next);
 			
 			return ms;
+		},
+		getFinalCss: function(css){
+			if (css == null) {
+				css = {};
+			}
+			
+			model_getFinalCss(this.model, css);
+			model_getFinalCss(this.next, css);
+			
+			return css;
 		}
 	};
 

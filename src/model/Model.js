@@ -76,25 +76,29 @@ var Model = (function() {
 	Model.prototype = {
 		constructor: Model,
 		start: function(element, onComplete) {
-			this.onComplete = onComplete;
+			
+			this.element = element;
+			
+			if (supportTransitions === false) {
+				this.apply(this.model.getFinalCss());
+				
+				onComplete && onComplete();
+				return;
+			}
+			
+			element.addEventListener(getTransitionEndEvent(), this.transitionEnd, false);
+			
+			
 			var startCss = {},
 				css = {};
-
+				
+			this.onComplete = onComplete;
 			this.model.reset();
 			this.stack.clear();
 			this.stack.put(this.model);
 			this.stack.getCss(startCss, css);
-
-
-
-			element.addEventListener(getTransitionEndEvent(), this.transitionEnd, false);
-			this.element = element;
 			this.apply(startCss, css);
 			
-			if (onComplete && supportTransitions === false) {
-				onComplete();
-				return;
-			}
 			
 			this.finishTimeout = setTimeout(this.finish, this.duration);
 		},
