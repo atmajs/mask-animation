@@ -98,6 +98,20 @@ var ModelData = (function() {
 		}
 	}
 	
+	function time_fromString(str){
+		if (!str) 
+			return 0;
+		
+		if (str.indexOf('ms') !== -1) 
+			return parseInt(str);
+		
+		if (str.indexOf('s')) 
+			return parseFloat(str) * 1000;
+		
+		console.warn('<mask:animation> parsing time', str);
+		return 0;
+	}
+	
 	function model_getDuration(model) {
 	
 		var isarray = arr_isArray(model),
@@ -113,12 +127,9 @@ var ModelData = (function() {
 			
 			if (fn_isFunction(x.getDuration)) {
 				ms = x.getDuration();
-			}
-			else if (model.duration.indexOf('ms') !== -1) {
-				ms = parseInt(model.duration);
-			}
-			else if (model.duration.indexOf('s') !== -1) {
-				ms = parseInt(model.duration) * 1000;
+			} else {
+				
+				ms = time_fromString(model.duration) + time_fromString(model.delay);
 			}
 			
 			if (ms > max) 
