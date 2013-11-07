@@ -8,15 +8,19 @@
 	}
 
 	// import helper.js
+	
+	var state_READY = 1,
+		state_ANIMATE = 2
+		;
 
-	function AnimationCompo() {
-
-	}
+	function AnimationCompo() {}
 
 	AnimationCompo.prototype = {
 		constructor: AnimationCompo,
-
-		render: function(model, cntx, container){
+		state: state_READY,
+		repeat: 1,
+		step: 1, 
+		render: function(model, ctx, container){
 
 			if (this.nodes == null) {
 				console.warn('No Animation Model');
@@ -59,14 +63,49 @@
 				Compo.pipe.addController(this);
 			}
 
-
-
 			this.model = new Model(mask_toJSON(this.nodes));
 			this.container = container;
+			
+			if (this.attr['x-repeat']) {
+				this.repeat = this.attr['x-repeat'] << 0 || Infinity; 
+			}
 		},
 
 		start: function(callback, element){
-			this.model.start(element || this.container, callback);
+			
+			
+			if (this.state === state_ANIMATE) {
+				this.stop();
+			}
+			
+			this.element = element || this.container;
+			this.state = state_ANIMATE;
+			this.callback = callback;
+			
+			this.step = 1;
+			this.model.start(this.element, fn_proxy(this, this.nextStep));
+			
+			return this;
+		},
+		
+		stop: function(){
+			// Not Completely Implemented
+			
+			if (this.callback) 
+				this.callback(this);
+			
+			this.model.stop();
+			this.element = null;
+			this.callback = null;
+			this.state = state_READY;
+			
+		},
+		nextStep: function(){
+			if (++this.step > this.repeat) 
+				return this.stop();
+			
+			
+			this.model.start(this.element, fn_proxy(this, this.nextStep));
 		}
 	};
 
@@ -81,7 +120,7 @@
 			return;
 		}
 
-		animation.start(callback, element);
+		return animation.start(callback, element);
 	};
 
 }());

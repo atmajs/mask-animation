@@ -68,7 +68,8 @@ var Model = (function() {
 		 */
 		this.duration = this.model.getDuration();
 		
-		this.transitionEnd = fn_proxy(this, this.transitionEnd);
+		this._transitionEnd = fn_proxy(this, this._transitionEnd);
+		
 		this.finish = fn_proxy(this, this.finish);
 		this.finishTimeout = null;
 	}
@@ -86,7 +87,7 @@ var Model = (function() {
 				return;
 			}
 			
-			element.addEventListener(getTransitionEndEvent(), this.transitionEnd, false);
+			element.addEventListener(getTransitionEndEvent(), this._transitionEnd, false);
 			
 			
 			var startCss = {},
@@ -102,13 +103,30 @@ var Model = (function() {
 			
 			this.finishTimeout = setTimeout(this.finish, this.duration);
 		},
+		stop: function(){
+			
+			this
+				.element
+				.style
+				.setProperty(vendorPrfx + 'transition', 'none')
+				;
+			
+			this.finish();
+		},
+		
 		finish: function(){
-			this.element.removeEventListener(getTransitionEndEvent(), this.transitionEnd, false);
+			this
+				.element
+				.removeEventListener(getTransitionEndEvent(), this._transitionEnd, false)
+				;
 			
 			if (fn_isFunction(this.onComplete))
 				this.onComplete();
+			
+			this.onComplete = null;
+			this.element = null;
 		},
-		transitionEnd: function(event) {
+		_transitionEnd: function(event) {
 			
 			// some other css3 transition could be in nested elements
 			if (event.target !== event.currentTarget) {

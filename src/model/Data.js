@@ -9,8 +9,10 @@ var ModelData = (function() {
 			data = {},
 			length = arr.length;
 
-		data.prop = arr[0] in vendorProperties ? vendorPrfx + arr[0] : arr[0];
-
+		data.prop = arr[0] in vendorProperties
+			? vendorPrfx + arr[0]
+			: arr[0]
+			;
 
 		var vals = arr[1].split(/ *> */);
 

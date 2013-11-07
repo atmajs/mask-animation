@@ -4,6 +4,15 @@ function fn_isFunction(fn) {
 
 function fn_proxy(ctx, fn) {
     return function(){
-		return fn.apply(ctx, arguments);
+		switch(arguments.length){
+			case 0:
+				return fn.call(ctx);
+			case 1:
+				return fn.call(ctx, arguments[0]);
+			case 2:
+				return fn.call(ctx, arguments[1]);
+			default:
+				return fn.apply(ctx, arguments);		
+		}
 	};
 }
