@@ -1,8 +1,7 @@
 CSS3 and Sprite Animations
 -----
 
-
-````css
+```css
 div {
     :animation #myAnimationID x-slots='slotName' x-pipes='pipeName.slotName' {
         @model {
@@ -16,15 +15,14 @@ div {
     	}
     }
 }
-````
-
-<a href='http://libjs.it/mask-try/#preset::animation'> Simple Demo </a>
+```
+[Simple Demo](http://atmajs.com/mask)
 
 #### Animation Property Declaration
 is a TextNode with a structure:
-````javascript
+```javascript
 'propertyName | from > to | time timing delay'
-````
+```
 
 Defaults:
 * timing = linear
@@ -42,17 +40,17 @@ Example:
 
 Features:
 * transform - can be used without a vendor prefix - it will be auto added (if needed)
-* transformation will be tracked, so if you animate 'translate', and in '@next' model animate 'scale' - 'translate' will be kept in element 'transform' style
-* non animatable properties are also supported, such as 'display', 'visibility' - they should have no "from" property, and the duration is 0s
+* transformation will be tracked, so if you animate `translate`, and in `@next` model animate `scale` - 'translate' will be kept in element 'transform' style
+* not-animatable properties are also supported, such as `display`, `visibility` - they should have no "from" property, and the duration is 0s
 
 #### Animation Model Tree
 
-Consists of ```@model``` and ```@next``` tags. And they can be nested within each other.
-When ```@model``` (and all inner ```@model``` and all inner ```@next```) animation is ready then ```@next``` will be animated.
-All ```@next``` models are optional
+Consists of `@model` and `@next` tags. And they can be nested within each other.
+When `@model` (and all inner `@model` and all inner `@next`) animation is ready then `@next` will be animated.
+All `@next` models are optional
 
 Sample
-````javascript
+```javascript
 @model {
 	@model {
 		'transform | > rotate(45deg) | 1s linear' // rotate to 45 degrees from initial state
@@ -77,38 +75,47 @@ Sample
 		'display | > none' // hide element -> end animation -> call onComplete callback
 	}
 }
-````
+```
 
 #### Signals
-As Mask supports signal/slots and pipes technics, so slots and piped-slots can be defined, so when the signal is emited in controllers tree or in a pipe
-the animation will be started
+Slots and piped-slots can be defined, so that the animation will be started, when the signal is emited in controllers tree or in a pipe
 
 ##### Slots
-````css
-:animation #aniID x-slots='slotName; anyOtherName' { // model
-````
+```scss
+div {
+	:animation #aniID x-slots='slotName; anyOtherName' {
+		// ... animation model
+	}
+}
+```
 
-So now if some controller emits a signal downwards, and the signal reaches the animation handler, then element will be animated
-````javascript
+So now if some parent controller emits the signal downwards, and it reaches the animation handler, then element will be animated:
+```javascript
 this.emitIn('slotName');
-````
+```
 
 Controller can start animation also manually with, and if needed - override animate element.
-````javascript
+```javascript
 this.animation('aniID').start(?onAnimationEnd, ?element);
-````
+```
 
 ##### Pipes
-```` :animation #aniID x-pipes='pipeName.slotName; otherPipe.otherSlot' { // model ````
+```scss
+div {
+	:animation #aniID x-pipes='pipeName.slotName; otherPipe.otherSlot' {
+		//...
+	}
+}
+```
 
-Animation Handler will be binded to a specified pipes, and if there a signal is emitted, then it will start the animation.
+Animation Handler will be binded to a specified pipes, and if there the signal is emitted, then it will start the animation.
 
-You emit a signal in a pipe with:
-````javascript
+Emit a signal in a pipe with:
+```javascript
 Compo.pipe('pipeName').emit('signalName', ?argsArray);
-````
+```
 
 
 
 ----
-Atma.js Project
+_(c) MIT. Atma.js Project
