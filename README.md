@@ -108,7 +108,7 @@ div {
 }
 ```
 
-Animation Handler will be binded to a specified pipes, and if there the signal is emitted, then it will start the animation.
+Animation Handler will be binded to specified pipes, and when the signal is emitted there, the animation will be started.
 
 Emit a signal in a pipe with:
 ```javascript
