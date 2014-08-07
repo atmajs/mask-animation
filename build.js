@@ -5,7 +5,7 @@
  **/
 
 
-global.config = {
+module.exports = {
 	'settings': {
 		io: {
 			extensions: {
