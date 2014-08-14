@@ -103,28 +103,27 @@ var Model = (function() {
 			
 			this.finishTimeout = setTimeout(this.finish, this.duration);
 		},
+		
+		// alias
 		stop: function(){
-			
-			this
-				.element
-				.style
-				.setProperty(vendorPrfx + 'transition', 'none')
-				;
-			
 			this.finish();
 		},
 		
 		finish: function(){
-			this
-				.element
-				.removeEventListener(getTransitionEndEvent(), this._transitionEnd, false)
-				;
+			if (this.element == null) 
+				return;
 			
-			if (fn_isFunction(this.onComplete))
-				this.onComplete();
+			this.element.style.setProperty(vendorPrfx + 'transition', 'none');
+			this.element.removeEventListener(
+				getTransitionEndEvent(), this._transitionEnd, false
+			);
 			
+			var fn = this.onComplete;
 			this.onComplete = null;
 			this.element = null;
+			
+			if (fn_isFunction(fn))
+				fn();
 		},
 		_transitionEnd: function(event) {
 			
