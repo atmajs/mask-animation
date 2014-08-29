@@ -165,37 +165,30 @@ var Model = (function() {
 
 			
 			
-			if (env_isMoz || env_isMs) {
-				//setTimout(.., 0) doesnt solve layout racing in Moz and Ms
-				getComputedStyle(element).width
-			}
 			
-			setTimeout(function() {
-				var fire;
-				for (var key in css) {
-					style.setProperty(key, css[key], '');
-					if (ImmediateCss.hasOwnProperty(key)) {
-						(fire || (fire = [])).push(key);
-					}
+			// Layout racing. (Better then just the setTimout(.., 0))
+			getComputedStyle(element).width
+			
+			var fire;
+			for (var key in css) {
+				style.setProperty(key, css[key], '');
+				if (ImmediateCss.hasOwnProperty(key)) {
+					(fire || (fire = [])).push(key);
 				}
+			}
 
-				if (fire == null || TransitionEvent == null) {
-					return;
-				}
-
-				var eventName = getTransitionEndEvent();
-
-				for (var i = 0; i < fire.length; i++) {
-					var event = new TransitionEvent(eventName, {
-						propertyName: fire[i],
-						bubbles: true,
-						cancelable: true
-					});
-
-					element.dispatchEvent(event);
-				}
-
-			}, 0);
+			if (fire == null || TransitionEvent == null) 
+				return;
+			
+			var eventName = getTransitionEndEvent();
+			for (var i = 0; i < fire.length; i++) {
+				var event = new TransitionEvent(eventName, {
+					propertyName: fire[i],
+					bubbles: true,
+					cancelable: true
+				});
+				element.dispatchEvent(event);
+			}
 		}
 	};
 

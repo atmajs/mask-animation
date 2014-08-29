@@ -19,7 +19,10 @@
 		constructor: AnimationCompo,
 		state: state_READY,
 		repeat: 1,
-		step: 1, 
+		step: 1,
+		slots: null,
+		pipes: null,
+		attr: null,
 		render: function(model, ctx, container){
 
 			if (this.nodes == null) {
@@ -69,6 +72,10 @@
 			if (this.attr['x-repeat']) {
 				this.repeat = this.attr['x-repeat'] << 0 || Infinity; 
 			}
+			if (this.attr['x-autostart']) {
+				this.slots = this.slots || {};
+				this.slots.domInsert = this.start.bind(this);
+			}
 		},
 
 		start: function(callback, element){
@@ -104,8 +111,16 @@
 			if (++this.step > this.repeat) 
 				return this.stop();
 			
-			
 			this.model.start(this.element, fn_proxy(this, this.nextStep));
+		},
+		
+		dispose: function(){
+			if (this.state !== state_READY) {
+				this.model.onComplete = null;
+				this.model.stop();
+				this.element = null;
+				this.callback = null;
+			}
 		}
 	};
 
