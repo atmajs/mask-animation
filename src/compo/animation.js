@@ -20,6 +20,7 @@
 		state: state_READY,
 		repeat: 1,
 		step: 1,
+		delayTimer: null,
 		slots: null,
 		pipes: null,
 		attr: null,
@@ -79,11 +80,20 @@
 		},
 
 		start: function(callback, element){
+			if (this.delayTimer) 
+				clearTimeout(this.delayTimer);
 			
-			
-			if (this.state === state_ANIMATE) {
-				this.stop();
+			var delay = this.attr['x-delay'];
+			if (delay != null) {
+				this.delayTimer = setTimeout(this._start.bind(this, callback, element), delay << 0);
+				return this;
 			}
+			this._start(callback, element);
+			return this;
+		},
+		_start: function(callback, element){
+			if (this.state === state_ANIMATE) 
+				this.stop();
 			
 			this.element = element || this.container;
 			this.state = state_ANIMATE;
@@ -91,8 +101,6 @@
 			
 			this.step = 1;
 			this.model.start(this.element, fn_proxy(this, this.nextStep));
-			
-			return this;
 		},
 		
 		stop: function(){
