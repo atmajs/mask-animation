@@ -1,0 +1,14 @@
+{
+  "name": "mask-animation",
+  "version": "1.0.7",
+  "homepage": "https://github.com/atmajs/mask-animation",
+  "authors": [
+      "Alex Kit <alex.kit@atmajs.com>"
+  ],
+  "description": "CSS3 Animations",
+  "main": "lib/mask.animation.js",
+  "keywords": [
+      "CSS3 Animations"
+  ],
+  "license": "MIT"
+}
