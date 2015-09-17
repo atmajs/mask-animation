@@ -1,22 +1,18 @@
 
 (function(){
 
-	var Compo = global.Compo;
-	if (Compo == null) {
-		console.warn('To use :animation component, Compo should be defined');
-		return;
-	}
+	var Compo = mask.Compo;
 
 	// import helper.js
-	
+
 	var state_READY = 1,
 		state_ANIMATE = 2
 		;
 
-	function AnimationCompo() {}
-
-	AnimationCompo.prototype = {
-		constructor: AnimationCompo,
+	var AnimationCompo = mask.class.create({
+		meta: {
+			template: 'merge'
+		},
 		state: state_READY,
 		repeat: 1,
 		step: 1,
@@ -69,9 +65,9 @@
 
 			this.model = new Model(mask_toJSON(this.nodes));
 			this.container = container;
-			
+
 			if (this.attr['x-repeat']) {
-				this.repeat = this.attr['x-repeat'] << 0 || Infinity; 
+				this.repeat = this.attr['x-repeat'] << 0 || Infinity;
 			}
 			if (this.attr['x-autostart']) {
 				this.slots = this.slots || {};
@@ -80,9 +76,9 @@
 		},
 
 		start: function(callback, element){
-			if (this.delayTimer) 
+			if (this.delayTimer)
 				clearTimeout(this.delayTimer);
-			
+
 			var delay = this.attr['x-delay'];
 			if (delay != null) {
 				this.delayTimer = setTimeout(this._start.bind(this, callback, element), delay << 0);
@@ -92,36 +88,36 @@
 			return this;
 		},
 		_start: function(callback, element){
-			if (this.state === state_ANIMATE) 
+			if (this.state === state_ANIMATE)
 				this.stop();
-			
+
 			this.element = element || this.container;
 			this.state = state_ANIMATE;
 			this.callback = callback;
-			
+
 			this.step = 1;
 			this.model.start(this.element, fn_proxy(this, this.nextStep));
 		},
-		
+
 		stop: function(){
 			// Not Completely Implemented
-			
-			if (this.callback) 
+
+			if (this.callback)
 				this.callback(this);
-			
+
 			this.model.stop();
 			this.element = null;
 			this.callback = null;
 			this.state = state_READY;
-			
+
 		},
 		nextStep: function(){
-			if (++this.step > this.repeat) 
+			if (++this.step > this.repeat)
 				return this.stop();
-			
+
 			this.model.start(this.element, fn_proxy(this, this.nextStep));
 		},
-		
+
 		dispose: function(){
 			if (this.state !== state_READY) {
 				this.model.onComplete = null;
@@ -130,9 +126,10 @@
 				this.callback = null;
 			}
 		}
-	};
+	});
 
 	mask.registerHandler(':animation', AnimationCompo);
+	mask.registerHandler('Animation', AnimationCompo);
 
 
 	Compo.prototype.animate = function(id, callback, element /*?*/){

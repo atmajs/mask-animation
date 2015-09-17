@@ -1,27 +1,125 @@
 CSS3 and Sprite Animations
 -----
 [![Bower version](https://badge.fury.io/bo/mask-animation.svg)](http://badge.fury.io/bo/mask-animation)
+[![Bower version](https://badge.fury.io/bo/mask-animation.svg)](http://badge.fury.io/bo/mask-animation)
+
+Declare and run the animation in your `Mask` templates or direct from `JavaScript`
+
+Features:
+- Animation models: from simple to complex and deep-nested animations
+- Can contain not animatable properties within the model - _like 'display` property_.
+- CssTransforms: Prefix-less declaration
+- CssTransforms will be tracked, so if you animate `translate`, and in `next` model animate `scale` - 'translate' will be kept in element 'transform' style
+- Starting animation model: when not specified the model is taken from the actual current state.
 
 
-```css
-div {
-    :animation #myAnimationID x-slots='slotName' x-pipes='pipeName.slotName' {
-        @model {
-    		// property declaration
-        	'propertyName | from > to | time timing delay'
-        	'otherProperty ...'
-        }
-        @next {
-            // when upper model is ready
-            '(property declaration)'
-    	}
-    }
+### Animation Models
+- `AnimationProperty`:`string`
+
+	```javascript
+	propertyName | ?	 > to | time timing delay
+	```
+
+	| Key          | Required |Description |
+	|--------------|----------|------------|
+	|`propertyName`|`required`| **Any** css property, like `height`, `transform`, `left`, `display`, `visibility`, `bottom`, etc.|
+	|`from`        |`optional`| Initial css value for the property. Default is the current value for the property|
+	|`to`          |`required`| Target css value|
+	|`time`        |`optional`| Animation duration. Definition is like in `CSSTransition`, e.g.: `21s`, `450ms`. Default is `200ms`|
+	|`timing`      |`optional`| `CSSTransition` timing function, e.g.: `linear`, `ease-in`, `cubic-bezier(.13,.83,.83,.41)`.|
+	|`delay`       |`optional`| Delay time before starting the animation, e.g: `100ms`.|
+
+- `AnimationSet`:`Array<AnimationProperty>`
+
+	An array of `AnimationProperty`s. Starts the animation of the properties simultaneously. Each animation property can contain its own `time`, `timing` and `delay`
+
+- `AnimationObject`: `object`
+
+	```javascript
+	AnimationObject = {
+		model: AnimationObject | AnimationModelSet | AnimationProperty
+		next: AnimationObject | AnimationModelSet | AnimationProperty
+	}
+	```
+	| Key          | Required |Description |
+	|--------------|----------|------------|
+	|`model`       |`required`| Defines animation model. :exclamation: Can be an `AnimationObject` itself |
+	|`next`        |`optional`| Defines animation wich will be started after `model` is finished |
+
+### Mask
+##### Attributes
+```mask
+Animation #myAnimationID x-slots='slotName' x-pipes='pipeName.slotName'
+```
+| Key          | Description |
+|--------------|------------|
+|`id`          | The animation component can be found via this id. Or any ancestor component can start the animation by id. `this.animation('myAnimationID')`  |
+|`x-slots`     | Starts animation for a signal(s). `;` delimited slot names |
+|`x-pipes`     | Starts animation for a piped signal(s). `;` delimited slot names |
+
+##### AnimationProperty
+```mask
+	Animation {
+		'height | 0px > 100px | 200ms linear'
+	}
 }
 ```
+##### AnimationSet
+```mask
+	Animation {
+		'height | 0px > 100px | 200ms linear'
+		'transform | translateX(0%) > translateX(100%) | 100ms ease-in'
+		'background-color | green > red | 200ms ease-in 50ms'
+	}
+}
+```
+##### AnimationObject
+```mask
+	Animation {
+		@model {
+			@model > 'height | 0px > 100px | 200ms linear'
+			@next > 'border-radius | 0% > 50% | 100ms linear'
+		}
+		@next {
+			'background-color | > cyan | 100ms linear
+		}
+	}
+}
+```
+
+### JavaScript
+
+```javascript
+	mask.animate(element:Element, model: AnimationProperty | AnimationSet | AnimationObject, ?onComplete: Function);
+```
+
+##### AnimationProperty
+```javascript
+mask.animate(document.body, 'background-color | > red | 1s linear');
+```
+##### AnimationSet
+```javascript
+mask.animate(document.body, [
+	'background-color | > red | 1s linear',
+	'padding | 0px > 20px | 1s linear',
+]);
+```
+##### AnimationObject
+```javascript
+mask.animate(document.body, {
+	model: [
+		'background-color | > red | 1s linear',
+		'padding | 0px > 20px | 500ms linear',
+	],
+	next: 'visibility | > hidden'
+});
+```
+
 [Simple Demo](http://atmajs.com/mask)
 
 #### Animation Property Declaration
-is a TextNode with a structure:
+
+String with a pattern:
 ```javascript
 'propertyName | from > to | time timing delay'
 ```
@@ -32,27 +130,16 @@ Defaults:
 * from = current value
 
 Example:
-```javascript
-@model {
-	'opacity | 0.1 > .9 | 500ms ease-in'   // note: this is mask syntax, so no commas in the list
+```mask
+Animation {
+	'opacity | 0.1 > .9 | 500ms ease-in'
 	'transform | > translate(50px, 150px) | 1s'
 }
 
 ```
 
-Features:
-* transform - can be used without a vendor prefix - it will be auto added (if needed)
-* transformation will be tracked, so if you animate `translate`, and in `@next` model animate `scale` - 'translate' will be kept in element 'transform' style
-* not-animatable properties are also supported, such as `display`, `visibility` - they should have no "from" property, and the duration is 0s
-
-#### Animation Model Tree
-
-Consists of `@model` and `@next` tags. And they can be nested within each other.
-When `@model` (and all inner `@model` and all inner `@next`) animation is ready then `@next` will be animated.
-All `@next` models are optional
-
-Sample
-```javascript
+#### Complex Animation Model Sample
+```mask
 @model {
 	@model {
 		'transform | > rotate(45deg) | 1s linear' // rotate to 45 degrees from initial state
@@ -83,9 +170,9 @@ Sample
 Slots and piped-slots can be defined, so that the animation will be started, when the signal is emited in controllers tree or in a pipe
 
 ##### Slots
-```scss
+```mask
 div {
-	:animation #aniID x-slots='slotName; anyOtherName' {
+	Animation #aniID x-slots='slotName; anyOtherName' {
 		// ... animation model
 	}
 }
@@ -102,9 +189,9 @@ this.animation('aniID').start(?onAnimationEnd, ?element);
 ```
 
 ##### Pipes
-```scss
+```mask
 div {
-	:animation #aniID x-pipes='pipeName.slotName; otherPipe.otherSlot' {
+	Animation #aniID x-pipes='pipeName.slotName; otherPipe.otherSlot' {
 		//...
 	}
 }
@@ -120,4 +207,4 @@ Compo.pipe('pipeName').emit('signalName', ?argsArray);
 
 
 ----
-_(c) MIT. Atma.js Project
+:copyright: `MIT` _Atma.js Project_
