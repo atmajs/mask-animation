@@ -36,7 +36,10 @@ var ModelData = (function() {
 		data.timing = 'linear';
 		data.delay = '0';
 
-
+		var timing = TimingFns[data.timing];
+		if (timing != null) {
+			data.timing = timing;
+		}
 		return data;
 	}
 
@@ -46,8 +49,6 @@ var ModelData = (function() {
 		this.transformModel = parent && parent.transformModel || new TransformModel();
 
 		var model = data.model || data;
-
-
 
 		if (arr_isArray(model)) {
 			this.model = [];
@@ -80,7 +81,7 @@ var ModelData = (function() {
 		this.modelCount = arr_isArray(this.model)
 			? this.model.length
 			: 1;
-		
+
 
 		if (this.next != null) {
 			this.nextCount = arr_isArray(this.next)
@@ -99,23 +100,23 @@ var ModelData = (function() {
 			x.reset && x.reset();
 		}
 	}
-	
+
 	function time_fromString(str){
-		if (!str) 
+		if (!str)
 			return 0;
-		
-		if (str.indexOf('ms') !== -1) 
+
+		if (str.indexOf('ms') !== -1)
 			return parseInt(str);
-		
-		if (str.indexOf('s')) 
+
+		if (str.indexOf('s'))
 			return parseFloat(str) * 1000;
-		
+
 		console.warn('<mask:animation> parsing time', str);
 		return 0;
 	}
-	
+
 	function model_getDuration(model) {
-	
+
 		var isarray = arr_isArray(model),
 			length = isarray ? model.length : 1,
 			x = null,
@@ -123,44 +124,44 @@ var ModelData = (function() {
 			max = 0;
 		for (; isarray ? i < length : i < 1; i++) {
 			x = isarray ? model[i] : model;
-			
-			
+
+
 			var ms;
-			
+
 			if (fn_isFunction(x.getDuration)) {
 				ms = x.getDuration();
 			} else {
-				
+
 				ms = time_fromString(model.duration) + time_fromString(model.delay);
 			}
-			
-			if (ms > max) 
+
+			if (ms > max)
 				max = ms;
 		}
-		
+
 		return max;
 	}
-	
+
 	function model_getFinalCss(model, css){
-		if (model == null) 
+		if (model == null)
 			return;
-		
+
 		var isarray = arr_isArray(model),
 			length = isarray ? model.length : 1,
 			x = null,
 			i = 0;
 		for (; isarray ? i < length : i < 1; i++) {
 			x = isarray ? model[i] : model;
-			
-			
+
+
 			if (fn_isFunction(x.getFinalCss)) {
 				x.getFinalCss(css);
 				continue;
 			}
-			
+
 			css[x.prop] = x.to;
 		}
-		
+
 	}
 
 	ModelData.prototype = {
@@ -171,7 +172,7 @@ var ModelData = (function() {
 			this.modelCount = arr_isArray(this.model)
 				? this.model.length
 				: 1;
-			
+
 
 			if (this.next != null) {
 				this.nextCount = arr_isArray(this.next)
@@ -209,23 +210,23 @@ var ModelData = (function() {
 		},
 		getDuration: function(){
 			var ms = 0;
-			
+
 			if (this.model)
 				ms += model_getDuration(this.model);
-			
+
 			if (this.next)
 				ms += model_getDuration(this.next);
-			
+
 			return ms;
 		},
 		getFinalCss: function(css){
 			if (css == null) {
 				css = {};
 			}
-			
+
 			model_getFinalCss(this.model, css);
 			model_getFinalCss(this.next, css);
-			
+
 			return css;
 		}
 	};

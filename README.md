@@ -11,7 +11,7 @@ Features:
 - CssTransforms: Prefix-less declaration
 - CssTransforms will be tracked, so if you animate `translate`, and in `next` model animate `scale` - 'translate' will be kept in element 'transform' style
 - Starting animation model: when not specified the model is taken from the actual current state.
-
+- Supports addition timing functions. See [Easings.net](http://easings.net/)
 
 ### Animation Models
 - `AnimationProperty`:`string`
@@ -26,7 +26,7 @@ Features:
 	|`from`        |`optional`| Initial css value for the property. Default is the current value for the property|
 	|`to`          |`required`| Target css value|
 	|`time`        |`optional`| Animation duration. Definition is like in `CSSTransition`, e.g.: `21s`, `450ms`. Default is `200ms`|
-	|`timing`      |`optional`| `CSSTransition` timing function, e.g.: `linear`, `ease-in`, `cubic-bezier(.13,.83,.83,.41)`.|
+	|`timing`      |`optional`| `CSSTransition` timing function, e.g.: `linear`, `ease-in`, `cubic-bezier(.13,.83,.83,.41)`, 'easeInOutExpo'.|
 	|`delay`       |`optional`| Delay time before starting the animation, e.g: `100ms`.|
 
 - `AnimationSet`:`Array<AnimationProperty>`
@@ -80,7 +80,7 @@ Animation {
 			@next > 'border-radius | 0% > 50% | 100ms linear'
 		}
 		@next {
-			'background-color | > cyan | 100ms linear,
+			'background-color | > cyan | 100ms easeInOutCubic,
 			'transform | > scale(0) | 3s linear'
 		}
 	}
