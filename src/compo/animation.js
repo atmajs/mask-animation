@@ -131,7 +131,6 @@
 	mask.registerHandler(':animation', AnimationCompo);
 	mask.registerHandler('Animation', AnimationCompo);
 
-
 	Compo.prototype.animate = function(id, callback, element /*?*/){
 		var animation = this.find('#' + id);
 		if (animation == null) {
