@@ -17,7 +17,7 @@ Features:
 - `AnimationProperty`:`string`
 
 	```javascript
-	propertyName | ?	 > to | time timing delay
+	propertyName | ?from > to | time timing delay
 	```
 
 	| Key          | Required |Description |
@@ -59,29 +59,29 @@ Animation #myAnimationID x-slots='slotName' x-pipes='pipeName.slotName'
 
 ##### AnimationProperty
 ```mask
-	Animation {
-		'height | 0px > 100px | 200ms linear'
-	}
+Animation {
+	'height | 0px > 100px | 200ms linear'
+}
 }
 ```
 ##### AnimationSet
 ```mask
-	Animation {
-		'height | 0px > 100px | 200ms linear'
-		'transform | translateX(0%) > translateX(100%) | 100ms ease-in'
-		'background-color | green > red | 200ms ease-in 50ms'
-	}
+Animation {
+	'height | 0px > 100px | 200ms linear'
+	'transform | translateX(0%) > translateX(100%) | 100ms ease-in'
+	'background-color | green > red | 200ms ease-in 50ms'
 }
 ```
 ##### AnimationObject
 ```mask
 	Animation {
 		@model {
-			@model > 'height | 0px > 100px | 200ms linear'
+			@model > 'transform | > translateY(100px) | 200ms linear'
 			@next > 'border-radius | 0% > 50% | 100ms linear'
 		}
 		@next {
-			'background-color | > cyan | 100ms linear
+			'background-color | > cyan | 100ms linear,
+			'transform | > scale(0) | 3s linear'
 		}
 	}
 }
@@ -90,7 +90,11 @@ Animation #myAnimationID x-slots='slotName' x-pipes='pipeName.slotName'
 ### JavaScript
 
 ```javascript
-	mask.animate(element:Element, model: AnimationProperty | AnimationSet | AnimationObject, ?onComplete: Function);
+mask.animate(
+	element:Element,
+	model: AnimationProperty | AnimationSet | AnimationObject,
+	?onComplete: Function
+);
 ```
 
 ##### AnimationProperty
@@ -117,41 +121,24 @@ mask.animate(document.body, {
 
 [Simple Demo](http://atmajs.com/mask)
 
-#### Animation Property Declaration
-
-String with a pattern:
-```javascript
-'propertyName | from > to | time timing delay'
-```
-
-Defaults:
-* timing = linear
-* delay = 0
-* from = current value
-
-Example:
-```mask
-Animation {
-	'opacity | 0.1 > .9 | 500ms ease-in'
-	'transform | > translate(50px, 150px) | 1s'
-}
-
-```
 
 #### Complex Animation Model Sample
 ```mask
 @model {
 	@model {
-		'transform | > rotate(45deg) | 1s linear' // rotate to 45 degrees from initial state
+		// rotate to 45 degrees from initial state
+		'transform | > rotate(45deg) | 1s linear'
 	}
 	@next {
-		'transform | scale(0) > scale(2) | 500ms' // scale from 0 to 2, rotation will be kept
+		// then scale from 0 to 2 (rotation will be kept)
+		'transform | scale(0) > scale(2) | 500ms'
 	}
 }
 @next {
 	@model {
 		@model {
-			// animate background-color for 3 seconds after upper model is ready, that means, after scale animation end.
+			// animate background-color for 3 seconds after upper model is ready,
+			// that means, after scale animation end.
 			'background-color | white > red | 3s ease-out'
 		}
 		@next {
@@ -161,7 +148,8 @@ Animation {
 		}
 	}
 	@next {
-		'display | > none' // hide element -> end animation -> call onComplete callback
+		// hide element -> end animation -> call onComplete callback
+		'display | > none'
 	}
 }
 ```
