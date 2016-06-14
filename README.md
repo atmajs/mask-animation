@@ -56,12 +56,14 @@ Animation #myAnimationID x-slots='slotName' x-pipes='pipeName.slotName'
 |`id`          | The animation component can be found via this id. Or any ancestor component can start the animation by id. `this.animation('myAnimationID')`  |
 |`x-slots`     | Starts animation for a signal(s). `;` delimited slot names |
 |`x-pipes`     | Starts animation for a piped signal(s). `;` delimited slot names |
+|`x-repeat`    | Default is 1. How many times single animation should be repeated |
+|`x-delay`     | Default is 0. Milliseconds to delay the animation |
+|`x-autostart` | Default is None. Property to define, the animation should be started immediately on `domInsert`|
 
 ##### AnimationProperty
 ```mask
 Animation {
 	'height | 0px > 100px | 200ms linear'
-}
 }
 ```
 ##### AnimationSet
