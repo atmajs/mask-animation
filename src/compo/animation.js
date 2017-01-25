@@ -63,6 +63,20 @@
 				Compo.pipe.addController(this);
 			}
 
+			var imax = nodes.length,
+				i = -1;
+			while(++i < imax) {
+				var node = nodes[i];
+				if (node.tagName === 'function') {
+					if (node.compile == null) {
+						console.error('Please update MaskJS to compile fns inside Animation compo');
+						break;
+					}
+					var fn = node.compile();
+					this[node.name] = fn;
+				}
+			}
+
 			this.model = new Model(mask_toJSON(nodes));
 			this.container = container;
 
