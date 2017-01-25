@@ -64,7 +64,8 @@
 			}
 
 			var imax = nodes.length,
-				i = -1;
+				i = -1,
+				startWasOverriden = false;
 			while(++i < imax) {
 				var node = nodes[i];
 				if (node.tagName === 'function') {
@@ -74,10 +75,15 @@
 					}
 					var fn = node.compile(null, this);
 					this[node.name] = fn;
+					if (node.name === 'start') {
+						startWasOverriden = true;
+					}
 				}
 			}
 
-			this.model = new Model(mask_toJSON(nodes));
+			if (startWasOverriden === false) {
+				this.model = new Model(mask_toJSON(nodes));
+			}
 			this.container = container;
 
 			if (this.attr['x-repeat']) {
