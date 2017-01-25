@@ -72,7 +72,7 @@
 						console.error('Please update MaskJS to compile fns inside Animation compo');
 						break;
 					}
-					var fn = node.compile();
+					var fn = node.compile(null, this);
 					this[node.name] = fn;
 				}
 			}
