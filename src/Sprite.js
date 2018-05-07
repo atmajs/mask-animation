@@ -3,14 +3,25 @@ var Sprite = (function() {
 		vendor = null,
 		initVendorStrings = function() {
 			
-			vendor = {
-				keyframes: "@" + vendorPrfx + "keyframes",
-				AnimationIterationCount: prfx + 'AnimationIterationCount',
-				AnimationDuration: prfx + 'AnimationDuration',
-				AnimationTimingFunction: prfx + 'AnimationTimingFunction',
-				AnimationFillMode: prfx + 'AnimationFillMode',
-				AnimationName: prfx + 'AnimationName'
-			};
+			if (prfx) {
+				vendor = {
+					keyframes: "@" + vendorPrfx + "keyframes",
+					AnimationIterationCount: prfx + 'AnimationIterationCount',
+					AnimationDuration: prfx + 'AnimationDuration',
+					AnimationTimingFunction: prfx + 'AnimationTimingFunction',
+					AnimationFillMode: prfx + 'AnimationFillMode',
+					AnimationName: prfx + 'AnimationName'
+				};
+			} else {
+				vendor = {
+					keyframes: "@keyframes",
+					AnimationIterationCount: 'animationIterationCount',
+					AnimationDuration: 'animationDuration',
+					AnimationTimingFunction: 'animationTimingFunction',
+					AnimationFillMode: 'animationFillMode',
+					AnimationName: 'animationName'
+				};
+			}
 		};
 
 		return {
@@ -30,8 +41,9 @@ var Sprite = (function() {
 						property = data.property || 'background-position-x';
 
 					for (var i = 0; i < frames; i++) {
-						var rule = (step * (i + 1)) + '% { ' + property + ': ' + (-data.frameWidth * (i + (data.frameStart || 0))) + 'px}';
-						keyFrameAnimation.insertRule(rule);
+						var rule = (step * (i + 1)) + '% { ' + property + ': ' + (-data.frameWidth * (i + (data.frameStart || 0))) + 'px}';						
+						var appender = keyFrameAnimation.insertRule || keyFrameAnimation.appendRule;
+						appender.call(keyFrameAnimation, rule);
 					}
 					keyFrameAnimation.iterationCount = data.iterationCount;
 					keyFrameAnimation.frameToStop = data.frameToStop;
